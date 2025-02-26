@@ -38,55 +38,45 @@ How to Run
 1. Clone the Repository:
 Clone this repository to your local machine:
 
-bash
-Copy
-Edit
 git clone https://github.com/Ramiksha24/Google--AI-algorithm-to-identify-timing-violations-Girl-Hackathon.git
 cd Google--AI-algorithm-to-identify-timing-violations-Girl-Hackathon
 2. Train the Model:
 To train the model, run:
 
-bash
-Copy
-Edit
 python model_training.py
 3. Evaluate the Model:
 Evaluate the trained model by running:
 
-bash
-Copy
-Edit
 python evaluate_model.py
 4. Make Predictions:
 For predictions on new RTL module data, use the following command:
-
-bash
-Copy
-Edit
 python predict.py
-Dataset
+
+## Dataset
+
 The dataset used in this project contains synthesis report data with the following features:
 
-module_name: Name of the RTL module.
-module_type: Type of the module.
-signal_name: Name of the signal.
-signal_width: Width of the signal.
-is_output: Boolean flag indicating whether the signal is an output.
-is_registered: Boolean flag indicating whether the signal is registered.
-fanin: Number of input signals feeding into the signal.
-fanout: Number of output signals driven by the signal.
-combinational_ops: Number of combinational operations.
-arithmetic_ops: Number of arithmetic operations.
-mux_ops: Number of multiplexing operations.
-always_blocks: Number of always blocks in the RTL code.
-case_statements: Number of case statements.
-if_statements: Number of if statements.
-loop_constructs: Number of loop constructs.
-module_complexity: Overall complexity of the module.
-technology_node_nm: Technology node (in nanometers).
-clock_frequency_mhz: Clock frequency (in MHz).
-optimization_level: Level of optimization applied to the design.
-combinational_depth: Target variable (combinational logic depth).
+1. **module_name**: Name of the RTL module.
+2. **module_type**: Type of the module.
+3. **signal_name**: Name of the signal.
+4. **signal_width**: Width of the signal.
+5. **is_output**: Boolean flag indicating whether the signal is an output.
+6. **is_registered**: Boolean flag indicating whether the signal is registered.
+7. **fanin**: Number of input signals feeding into the signal.
+8. **fanout**: Number of output signals driven by the signal.
+9. **combinational_ops**: Number of combinational operations.
+10. **arithmetic_ops**: Number of arithmetic operations.
+11. **mux_ops**: Number of multiplexing operations.
+12. **always_blocks**: Number of always blocks in the RTL code.
+13. **case_statements**: Number of case statements.
+14. **if_statements**: Number of if statements.
+15. **loop_constructs**: Number of loop constructs.
+16. **module_complexity**: Overall complexity of the module.
+17. **technology_node_nm**: Technology node (in nanometers).
+18. **clock_frequency_mhz**: Clock frequency (in MHz).
+19. **optimization_level**: Level of optimization applied to the design.
+20. **combinational_depth**: Target variable (combinational logic depth).
+
 Understanding the Model
 Input Features
 The model uses the following features extracted from RTL code:
