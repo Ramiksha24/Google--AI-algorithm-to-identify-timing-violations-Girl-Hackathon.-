@@ -216,7 +216,7 @@ def generate_detailed_report(
 
 def evaluate_model(
     model_path: str = 'xgb_depth_predictor.joblib', 
-    test_data_path: str = 'rtl_depth_test_dataset.csv'
+    test_data_path: str = 'test_dataset2.csv'
 ) -> Optional[Dict[str, float]]:
     """
     Comprehensive model evaluation function.
