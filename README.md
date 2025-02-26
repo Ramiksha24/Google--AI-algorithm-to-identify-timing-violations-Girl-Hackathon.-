@@ -49,48 +49,49 @@ python evaluate_model.py
 python predict.py
 
 Dataset
+
+
 The dataset used in this project contains synthesis report data with the following features:
 
-module_name: Name of the RTL module.
+1. module_name: Name of the RTL module.
 
-module_type: Type of the module.
+2. module_type: Type of the module.
 
-signal_name: Name of the signal.
+3. signal_name: Name of the signal.
 
+4. signal_width: Width of the signal.
 
-signal_width: Width of the signal.
+5. is_output: Boolean flag indicating whether the signal is an output.
 
-is_output: Boolean flag indicating whether the signal is an output.
+6. is_registered: Boolean flag indicating whether the signal is registered.
 
-is_registered: Boolean flag indicating whether the signal is registered.
+7. fanin: Number of input signals feeding into the signal.
 
-fanin: Number of input signals feeding into the signal.
+8. fanout: Number of output signals driven by the signal.
 
-fanout: Number of output signals driven by the signal.
+9. combinational_ops: Number of combinational operations.
 
-combinational_ops: Number of combinational operations.
+10. arithmetic_ops: Number of arithmetic operations.
 
-arithmetic_ops: Number of arithmetic operations.
+11. mux_ops: Number of multiplexing operations.
 
-mux_ops: Number of multiplexing operations.
+12. always_blocks: Number of always blocks in the RTL code.
 
-always_blocks: Number of always blocks in the RTL code.
+13. case_statements: Number of case statements.
 
-case_statements: Number of case statements.
+14. if_statements: Number of if statements.
 
-if_statements: Number of if statements.
+15. loop_constructs: Number of loop constructs.
 
-loop_constructs: Number of loop constructs.
+16. module_complexity: Overall complexity of the module.
 
-module_complexity: Overall complexity of the module.
+17. technology_node_nm: Technology node (in nanometers).
 
-technology_node_nm: Technology node (in nanometers).
+18. clock_frequency_mhz: Clock frequency (in MHz).
 
-clock_frequency_mhz: Clock frequency (in MHz).
+19. optimization_level: Level of optimization applied to the design.
 
-optimization_level: Level of optimization applied to the design.
-
-combinational_depth: Target variable (combinational logic depth).
+20. combinational_depth: Target variable (combinational logic depth).
 
 
 Understanding the Model
