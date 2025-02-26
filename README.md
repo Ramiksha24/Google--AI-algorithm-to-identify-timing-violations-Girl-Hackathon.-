@@ -38,7 +38,7 @@ How to Run
 1. Clone the Repository:
 Clone this repository to your local machine:
 
-git clone https://github.com/Ramiksha24/Google--AI-algorithm-to-identify-timing-violations-Girl-Hackathon.git
+git clone https://github.com/Ramiksha24/Google--AI-algorithm-to-identify-timing-violations-Girl-Hackathon.git-
 cd Google--AI-algorithm-to-identify-timing-violations-Girl-Hackathon
 
 2. Train the Model:
