@@ -3,6 +3,61 @@ import numpy as np
 import pandas as pd
 import joblib
 
+def extract_features_from_rtl(rtl_code, signal_name):
+    """
+    Extract features from the RTL code for a given signal.
+    
+    Parameters:
+    -----------
+    rtl_code : str
+        Verilog RTL code
+    signal_name : str
+        Signal name for which features are extracted
+    
+    Returns:
+    --------
+    dict
+        Dictionary containing features for the signal
+    """
+    # Placeholder for feature extraction logic
+    features = {
+        'fanin': rtl_code.count(signal_name),  # Example: count how many times signal_name appears
+        'fanout': rtl_code.count(signal_name),  # Example: same for fanout (simplified logic)
+        'signal_width': 32,  # Default width for simplicity
+        'combinational_ops': rtl_code.count('assign'),  # Example: count how many assign statements exist
+        'arithmetic_ops': rtl_code.count('+') + rtl_code.count('-'),  # Count arithmetic operations
+        'mux_ops': rtl_code.count('case'),  # Count case statements for multiplexers
+        'always_blocks': rtl_code.count('always'),  # Count always blocks
+        'case_statements': rtl_code.count('case'),  # Count case statements
+        'if_statements': rtl_code.count('if'),  # Count if statements
+        'loop_constructs': rtl_code.count('for') + rtl_code.count('while'),  # Count loop constructs
+        'module_complexity': len(rtl_code.splitlines()),  # Use line count as a proxy for complexity
+    }
+    
+    return features
+
+def determine_module_type(rtl_code):
+    """
+    Determine the module type based on the RTL code.
+    
+    Parameters:
+    -----------
+    rtl_code : str
+        Verilog RTL code
+    
+    Returns:
+    --------
+    str
+        The module type (e.g., ALU, register, etc.)
+    """
+    # Placeholder for module type detection logic
+    if 'alu' in rtl_code.lower():
+        return 'ALU'
+    elif 'register' in rtl_code.lower():
+        return 'Register'
+    else:
+        return 'Generic'
+
 def analyze_rtl_module(rtl_code, model_path='xgb_depth_predictor.joblib'):
     """
     Analyze an entire RTL module and identify potential timing-critical signals.
@@ -98,6 +153,11 @@ def analyze_rtl_module(rtl_code, model_path='xgb_depth_predictor.joblib'):
     # Convert to DataFrame
     results_df = pd.DataFrame(results)
     
+    # Check if results_df is empty
+    if results_df.empty:
+        print("No signals found in the RTL code.")
+        return results_df
+    
     # Sort by predicted depth (descending)
     results_df = results_df.sort_values('predicted_depth', ascending=False)
     
@@ -168,81 +228,24 @@ def generate_timing_report(results_df, module_name, clock_period_ns=2.0):
             report += f"  Type: {path['signal_type']}, Width: {path['signal_width']}\n"
             report += f"  Predicted Depth: {path['predicted_depth']:.2f} levels\n"
             report += f"  Estimated Delay: {path['delay_ns']:.2f} ns\n"
-            report += f"  Setup Slack: {path['setup_slack_ns']:.2f} ns\n"
+            report += f"  Setup Slack: {path['setup_slack_ns']:.2f} ns (Near-critical)\n"
             report += f"  Fan-in: {path['fanin']}, Fan-out: {path['fanout']}\n"
             report += "\n"
     else:
         report += "No near-critical paths found.\n\n"
-    
-    # Summary section
-    report += "Summary:\n"
-    report += "--------\n"
-    report += f"Worst Slack: {results_df['setup_slack_ns'].min():.2f} ns\n"
-    report += f"Average Slack: {results_df['setup_slack_ns'].mean():.2f} ns\n"
-    report += f"Recommended Actions: "
-    
-    if sum(results_df['setup_slack_ns'] < 0) > 0:
-        report += "Design requires optimization to meet timing requirements.\n"
-        report += "Consider pipelining or restructuring critical paths.\n"
-    else:
-        report += "Design meets timing requirements.\n"
-    
+
     return report
 
-# Example usage
-if __name__ == "__main__":
-    # Example ALU RTL
-    alu_rtl = """
-    module alu_32bit (
-        input wire clk,
-        input wire rst,
-        input wire [31:0] a,
-        input wire [31:0] b,
-        input wire [3:0] op,
-        output reg [31:0] result,
-        output reg overflow,
-        output reg zero_flag
-    );
-        reg [31:0] temp_result;
-        wire carry_out;
-        
-        always @(*) begin
-            case(op)
-                4'b0000: temp_result = a + b;
-                4'b0001: temp_result = a - b;
-                4'b0010: temp_result = a & b;
-                4'b0011: temp_result = a | b;
-                4'b0100: temp_result = a ^ b;
-                4'b0101: temp_result = ~a;
-                4'b0110: temp_result = a << b[4:0];
-                4'b0111: temp_result = a >> b[4:0];
-                default: temp_result = 32'h0;
-            endcase
-        end
-        
-        always @(posedge clk or posedge rst) begin
-            if (rst) begin
-                result <= 32'h0;
-                overflow <= 1'b0;
-                zero_flag <= 1'b0;
-            end else begin
-                result <= temp_result;
-                overflow <= (op == 4'b0000 && (a[31] == b[31]) && (temp_result[31] != a[31])) || 
-                           (op == 4'b0001 && (a[31] != b[31]) && (temp_result[31] != a[31]));
-                zero_flag <= (temp_result == 32'h0);
-            end
-        end
-    endmodule
-    """
-    
-    # Analyze module
-    results = analyze_rtl_module(alu_rtl)
-    
-    # Print results
-    print("RTL Analysis Results:")
-    print(results[['signal_name', 'predicted_depth', 'criticality', 'fanin', 'fanout']])
-    
-    # Generate timing report
-    report = generate_timing_report(results, "alu_32bit", clock_period_ns=2.0)
-    print("\nTiming Report:")
-    print(report)
+
+# Example Usage:
+
+# Assume 'rtl_code' contains your Verilog code and 'xgb_depth_predictor.joblib' is the trained ML model file path
+rtl_code = """your RTL code goes here"""
+results_df = analyze_rtl_module(rtl_code)
+
+# Generate and print the timing report
+if not results_df.empty:
+    timing_report = generate_timing_report(results_df, "example_module")
+    print(timing_report)
+else:
+    print("No signals found in the RTL code.")
