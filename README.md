@@ -77,41 +77,47 @@ The dataset used in this project contains synthesis report data with the followi
 19. **optimization_level**: Level of optimization applied to the design.
 20. **combinational_depth**: Target variable (combinational logic depth).
 
-Understanding the Model
-Input Features
+
+## Understanding the Model
+
+### Input Features
+
 The model uses the following features extracted from RTL code:
 
-Module characteristics:
+#### Module characteristics:
+- **Module type**: (ALU, Multiplier, etc.)
+- **Module complexity score**
+- **Architecture type**: (Pipeline, Parallel, etc.)
 
-Module type (ALU, Multiplier, etc.)
-Module complexity score
-Architecture type (Pipeline, Parallel, etc.)
-Signal characteristics:
+#### Signal characteristics:
+- **Signal fan-in**: (number of signals that affect this signal)
+- **Signal fan-out**: (number of other signals affected by this signal)
+- **Signal width**: (number of bits)
+- **Is output signal**: (boolean)
+- **Is registered signal**: (boolean)
 
-Signal fan-in (number of signals that affect this signal)
-Signal fan-out (number of other signals affected by this signal)
-Signal width (number of bits)
-Is output signal (boolean)
-Is registered signal (boolean)
-RTL complexity metrics:
+#### RTL complexity metrics:
+- **Number of always blocks**
+- **Number of assignments**
+- **Number of case statements**
+- **Number of if statements**
+- **Number of loop constructs**
+- **Combinational logic operations count**
+- **Arithmetic operations count**
 
-Number of always blocks
-Number of assignments
-Number of case statements
-Number of if statements
-Number of loop constructs
-Combinational logic operations count
-Arithmetic operations count
-Technology parameters:
+#### Technology parameters:
+- **Technology node**: (nm)
+- **Clock frequency**: (MHz)
 
-Technology node (nm)
-Clock frequency (MHz)
-Output
-Combinational Depth: Predicted number of logic levels in the critical path.
-Interpreting Results
-Depth < 5: Low complexity, likely to meet timing constraints.
-Depth 5-10: Medium complexity, may need attention for high-frequency designs.
-Depth > 10: High complexity, likely to cause timing violations.
+### Output
+
+- **Combinational Depth**: Predicted number of logic levels in the critical path
+
+### Interpreting Results
+- **Depth < 5**: Low complexity, likely to meet timing constraints
+- **Depth 5-10**: Medium complexity, may need attention for high-frequency designs
+- **Depth > 10**: High complexity, likely to cause timing violations
+
 How It Works
 The RTL Combinational Depth Predictor follows these steps:
 
