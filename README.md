@@ -40,14 +40,17 @@ Clone this repository to your local machine:
 
 git clone https://github.com/Ramiksha24/Google--AI-algorithm-to-identify-timing-violations-Girl-Hackathon.git
 cd Google--AI-algorithm-to-identify-timing-violations-Girl-Hackathon
+
 2. Train the Model:
 To train the model, run:
 
 python model_training.py
+
 3. Evaluate the Model:
 Evaluate the trained model by running:
 
 python evaluate_model.py
+
 4. Make Predictions:
 For predictions on new RTL module data, use the following command:
 python predict.py
