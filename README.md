@@ -52,54 +52,89 @@ Dataset
 The dataset used in this project contains synthesis report data with the following features:
 
 module_name: Name of the RTL module.
+
 module_type: Type of the module.
+
 signal_name: Name of the signal.
+
+
 signal_width: Width of the signal.
+
 is_output: Boolean flag indicating whether the signal is an output.
+
 is_registered: Boolean flag indicating whether the signal is registered.
+
 fanin: Number of input signals feeding into the signal.
+
 fanout: Number of output signals driven by the signal.
+
 combinational_ops: Number of combinational operations.
+
 arithmetic_ops: Number of arithmetic operations.
+
 mux_ops: Number of multiplexing operations.
+
 always_blocks: Number of always blocks in the RTL code.
+
 case_statements: Number of case statements.
+
 if_statements: Number of if statements.
+
 loop_constructs: Number of loop constructs.
+
 module_complexity: Overall complexity of the module.
+
 technology_node_nm: Technology node (in nanometers).
+
 clock_frequency_mhz: Clock frequency (in MHz).
+
 optimization_level: Level of optimization applied to the design.
+
 combinational_depth: Target variable (combinational logic depth).
 
+
 Understanding the Model
+
 Input Features
+
 The model uses the following features extracted from RTL code:
 
 Module characteristics:
 
 Module type (ALU, Multiplier, etc.)
+
 Module complexity score
+
 Architecture type (Pipeline, Parallel, etc.)
 
 
 Signal characteristics:
 
 Signal fan-in (number of signals that affect this signal)
+
 Signal fan-out (number of other signals affected by this signal)
+
 Signal width (number of bits)
+
 Is output signal (boolean)
+
 Is registered signal (boolean)
 
 
 RTL complexity metrics:
 
 Number of always blocks
+
 Number of assignments
+
 Number of case statements
+
 Number of if statements
+
 Number of loop constructs
+
 Combinational logic operations count
+
 Arithmetic operations count
 
 
