@@ -71,27 +71,27 @@ The dataset used in this project contains synthesis report data with the followi
 
 9. combinational_ops: Number of combinational operations.
 
-10. arithmetic_ops: Number of arithmetic operations.
+ 10. arithmetic_ops: Number of arithmetic operations.
 
-11. mux_ops: Number of multiplexing operations.
+ 11. mux_ops: Number of multiplexing operations.
 
-12. always_blocks: Number of always blocks in the RTL code.
+ 12. always_blocks: Number of always blocks in the RTL code.
 
-13. case_statements: Number of case statements.
+ 13. case_statements: Number of case statements.
 
-14. if_statements: Number of if statements.
+ 14. if_statements: Number of if statements.
 
-15. loop_constructs: Number of loop constructs.
+ 15. loop_constructs: Number of loop constructs.
 
 16. module_complexity: Overall complexity of the module.
 
-17. technology_node_nm: Technology node (in nanometers).
+ 17. technology_node_nm: Technology node (in nanometers).
 
-18. clock_frequency_mhz: Clock frequency (in MHz).
+ 18. clock_frequency_mhz: Clock frequency (in MHz).
 
-19. optimization_level: Level of optimization applied to the design.
+ 19. optimization_level: Level of optimization applied to the design.
 
-20. combinational_depth: Target variable (combinational logic depth).
+ 20. combinational_depth: Target variable (combinational logic depth).
 
 
 Understanding the Model
