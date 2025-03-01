@@ -32,6 +32,9 @@ def extract_features_from_rtl(rtl_code, signal_name):
         'if_statements': rtl_code.count('if'),  # Count if statements
         'loop_constructs': rtl_code.count('for') + rtl_code.count('while'),  # Count loop constructs
         'module_complexity': len(rtl_code.splitlines()),  # Use line count as a proxy for complexity
+        # Add the missing features that the model expects
+        'is_registered': 1 if re.search(r'reg\s+.*' + signal_name, rtl_code) is not None else 0,  # Check if signal is a register
+        'is_output': 1 if re.search(r'output\s+.*' + signal_name, rtl_code) is not None else 0,  # Check if signal is an output
     }
     
     return features
@@ -240,12 +243,38 @@ def generate_timing_report(results_df, module_name, clock_period_ns=2.0):
 # Example Usage:
 
 # Assume 'rtl_code' contains your Verilog code and 'xgb_depth_predictor.joblib' is the trained ML model file path
-rtl_code = """your RTL code goes here"""
-results_df = analyze_rtl_module(rtl_code)
+rtl_code = """module alu(
+    input [31:0] a,
+    input [31:0] b,
+    input [3:0] op,
+    output reg [31:0] result,
+    output reg overflow
+);
+    always @(*) begin
+        case(op)
+            4'b0000: result = a + b;
+            4'b0001: result = a - b;
+            4'b0010: result = a & b;
+            4'b0011: result = a | b;
+            4'b0100: result = a ^ b;
+            4'b0101: result = ~a;
+            4'b0110: result = a << b[4:0];
+            4'b0111: result = a >> b[4:0];
+            default: result = 32'h0;
+        endcase
+        overflow = (op == 4'b0000 && (a[31] == b[31]) && (result[31] != a[31])) || 
+                  (op == 4'b0001 && (a[31] != b[31]) && (result[31] != a[31]));
+    end
+endmodule"""
 
-# Generate and print the timing report
-if not results_df.empty:
-    timing_report = generate_timing_report(results_df, "example_module")
-    print(timing_report)
-else:
-    print("No signals found in the RTL code.")
+try:
+    results_df = analyze_rtl_module(rtl_code)
+
+    # Generate and print the timing report
+    if not results_df.empty:
+        timing_report = generate_timing_report(results_df, "alu_module")
+        print(timing_report)
+    else:
+        print("No signals found in the RTL code.")
+except Exception as e:
+    print(f"Error during analysis: {str(e)}")
