@@ -57,69 +57,90 @@ python predict.py
 
 ## Dataset
 
-The dataset used in this project contains synthesis report data with the following features:
+## 📊 Dataset Description  
 
-1. **module_name**: Name of the RTL module.
-2. **module_type**: Type of the module.
-3. **signal_name**: Name of the signal.
-4. **signal_width**: Width of the signal.
-5. **is_output**: Boolean flag indicating whether the signal is an output.
-6. **is_registered**: Boolean flag indicating whether the signal is registered.
-7. **fanin**: Number of input signals feeding into the signal.
-8. **fanout**: Number of output signals driven by the signal.
-9. **combinational_ops**: Number of combinational operations.
-10. **arithmetic_ops**: Number of arithmetic operations.
-11. **mux_ops**: Number of multiplexing operations.
-12. **always_blocks**: Number of always blocks in the RTL code.
-13. **case_statements**: Number of case statements.
-14. **if_statements**: Number of if statements.
-15. **loop_constructs**: Number of loop constructs.
-16. **module_complexity**: Overall complexity of the module.
-17. **technology_node_nm**: Technology node (in nanometers).
-18. **clock_frequency_mhz**: Clock frequency (in MHz).
-19. **optimization_level**: Level of optimization applied to the design.
-20. **combinational_depth**: Target variable (combinational logic depth).
+Each row in the dataset represents an RTL module with key attributes extracted from synthesis reports. Below are the details of each feature:  
+
+### **1️⃣ General Information**  
+- `module_name` → Name of the RTL module.  
+- `clock_frequency_mhz` → Operating clock frequency of the module (MHz).  
+
+### **2️⃣ Timing Analysis Features**  
+- `slack_ps` → Timing slack in picoseconds (ps). Positive slack means no violation; negative slack indicates a violation.  
+- `data_path_delay_ps` → Delay in the data path in picoseconds (ps).  
+- `required_time_ps` → Required arrival time for a signal to meet setup timing.  
+- `output_delay_ps` → Output delay introduced by external circuit constraints.  
+- `timing_violation` → Binary flag (1 = Violation, 0 = No Violation).  
+- `timing_violation_count` → Number of timing violations observed in the module.  
+- `timing_violation_risk` → A risk score indicating the severity of timing violations.  
+- `worst_violation` → Worst-case slack violation in picoseconds (ps).  
+- `timing_margin` → Difference between required and actual arrival times.  
+
+### **3️⃣ Logic Depth and Path Analysis**  
+- `max_logic_depth` → Maximum logic depth in the module.  
+- `rtl_max_fanout` → Maximum fan-out of a signal in the RTL design.  
+- `timing_worst_logic_depth` → Maximum logic depth in the worst-case path.  
+- `timing_worst_slack` → Slack value for the worst timing path.  
+- `timing_worst_data_path_delay` → Data path delay of the worst timing path.  
+- `timing_avg_logic_depth` → Average logic depth across different paths.  
+
+### **4️⃣ Structural Complexity Features**  
+- `cell_count` → Total number of standard cells in the module.  
+- `combinational_depth` → Combinational depth of the module (number of combinational logic stages).  
+- `rtl_combinational_block_count` → Number of combinational blocks in the RTL code.  
+- `rtl_sequential_block_count` → Number of sequential blocks (flip-flops, registers, etc.).  
+
+### **5️⃣ Logic Composition Features**  
+- `combinational_logic` → Percentage of combinational logic in the module.  
+- `arithmetic_ops` → Number of arithmetic operations (adders, multipliers, etc.).  
+- `multiplexers` → Number of multiplexers used in the design.  
+- `logic_and_percent` → Percentage of AND gates in the logic.  
+- `logic_or_percent` → Percentage of OR gates in the logic.  
+- `logic_not_percent` → Percentage of NOT gates in the logic.  
+- `logic_xor_percent` → Percentage of XOR gates in the logic.  
+- `logic_buffer_percent` → Percentage of buffer logic elements.  
+- `logic_sequential_percent` → Percentage of sequential elements in the logic.  
+
+## 📁 Dataset Usage  
+This dataset is used to train an **XGBoost ML model** for predicting combinational complexity and timing violations **without full synthesis runs**.  
 
 
-## Understanding the Model
+## 📖 Understanding the Model  
 
-### Input Features
+### 🛠️ Input Features  
 
-The model uses the following features extracted from RTL code:
+The model uses the following features extracted from RTL code to predict combinational depth and potential timing issues.  
 
-#### Module characteristics:
-- **Module type**: (ALU, Multiplier, etc.)
-- **Module complexity score**
-- **Architecture type**: (Pipeline, Parallel, etc.)
+#### 🔹 Module Characteristics:  
+- **Module Type** → ALU, Multiplier, etc.  
+- **Module Complexity Score** → A numerical score indicating the complexity of the module.  
+- **Architecture Type** → Pipeline, Parallel, etc.  
 
-#### Signal characteristics:
-- **Signal fan-in**: (number of signals that affect this signal)
-- **Signal fan-out**: (number of other signals affected by this signal)
-- **Signal width**: (number of bits)
-- **Is output signal**: (boolean)
-- **Is registered signal**: (boolean)
+#### 🔹 Signal Characteristics:  
+- **Signal Fan-in** → Number of signals that influence this signal.  
+- **Signal Fan-out** → Number of other signals affected by this signal.  
+- **Signal Width** → Number of bits.  
+- **Is Output Signal** → Boolean flag indicating if the signal is an output.  
+- **Is Registered Signal** → Boolean flag indicating if the signal is stored in a register.  
 
-#### RTL complexity metrics:
-- **Number of always blocks**
-- **Number of assignments**
-- **Number of case statements**
-- **Number of if statements**
-- **Number of loop constructs**
-- **Combinational logic operations count**
-- **Arithmetic operations count**
+#### 🔹 RTL Complexity Metrics:  
+- **Number of Always Blocks** → Count of `always` statements in the RTL.  
+- **Number of Assignments** → Count of assignment statements in the RTL.  
+- **Number of Case Statements** → Count of `case` constructs.  
+- **Number of If Statements** → Count of `if` conditions.  
+- **Number of Loop Constructs** → Count of `for`, `while`, `repeat`, etc.  
+- **Combinational Logic Operations Count** → Count of logical operations (AND, OR, NOT, XOR).  
+- **Arithmetic Operations Count** → Count of arithmetic operations (addition, subtraction, multiplication, etc.).  
 
-#### Technology parameters:
-- **Technology node**: (nm)
-- **Clock frequency**: (MHz)
+#### 🔹 Technology Parameters:  
+- **Technology Node** → Feature size in nanometers (nm).  
+- **Clock Frequency** → Operating clock speed in MHz.  
 
-### Output
+---
 
-- **Combinational Depth**: Predicted number of logic levels in the critical path
+### 🎯 Output  
 
-### Interpreting Results
-- **Depth < 5**: Low complexity, likely to meet timing constraints
-- **Depth 5-10**: Medium complexity, may need attention for high-frequency designs
-- **Depth > 10**: High complexity, likely to cause timing violations
+- **Combinational Depth** → Predicted number of logic levels in the critical path.
 
 ## How It Works
 
