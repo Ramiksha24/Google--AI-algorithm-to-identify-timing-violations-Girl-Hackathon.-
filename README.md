@@ -1,4 +1,4 @@
-# RTL Combinational Depth Predictor
+# RTL INSIGHT - Combinational Depth Predictor
 
 An AI-powered tool to predict combinational logic depth in RTL designs without requiring synthesis, enabling early identification of potential timing violations in VLSI design projects.
 
