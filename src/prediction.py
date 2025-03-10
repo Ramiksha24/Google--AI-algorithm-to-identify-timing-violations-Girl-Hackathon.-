@@ -65,7 +65,7 @@ class RTLTimingAnalyzer:
     
     def _create_default_model(self, model_type):
         """Create a simple default model for demonstration purposes"""
-        if model_type == 'classification':text
+        if model_type == 'classification':
             return Pipeline([
                 ('scaler', StandardScaler()),
                 ('xgb', xgb.XGBClassifier(n_estimators=50, max_depth=3))
